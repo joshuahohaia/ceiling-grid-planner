@@ -1,4 +1,7 @@
-import { COLOURS, DIMENSIONS } from '@/constants/design';
+import { DIMENSIONS } from '@/constants/design';
+import { GridItem } from '@/types/grid';
+import { drawGrid } from './drawing/drawGrid';
+import { drawComponent } from './drawing/drawComponent';
 
 interface RenderGridParams {
   ctx: CanvasRenderingContext2D;
@@ -6,6 +9,7 @@ interface RenderGridParams {
   cols: number;
   zoom: number;
   pan: { x: number; y: number };
+  items: GridItem[];
 }
 
 export const renderGrid = ({
@@ -14,6 +18,7 @@ export const renderGrid = ({
   cols,
   zoom,
   pan,
+  items = [],
 }: RenderGridParams) => {
   const dpr = window.devicePixelRatio || 1;
   ctx.clearRect(0, 0, ctx.canvas.width / dpr, ctx.canvas.height / dpr);
@@ -24,28 +29,12 @@ export const renderGrid = ({
   ctx.scale(zoom, zoom);
 
   const cellSize = DIMENSIONS.cellSize;
-  const gridWidth = cols * cellSize;
-  const gridHeight = rows * cellSize;
 
-  ctx.fillStyle = COLOURS.activeGrid.background;
-  ctx.fillRect(0, 0, gridWidth, gridHeight);
+  drawGrid(ctx, rows, cols, cellSize, zoom);
 
-  ctx.beginPath();
-  ctx.strokeStyle = COLOURS.activeGrid.lines;
-  ctx.lineWidth = 1;
+  items.forEach(item => {
+    drawComponent(ctx, item, cellSize);
+  });
 
-  // Vertical Lines
-  for (let x = 0; x <= gridWidth; x += cellSize) {
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, gridHeight);
-  }
-
-  // Horizontal Lines
-  for (let y = 0; y <= gridHeight; y += cellSize) {
-    ctx.moveTo(0, y);
-    ctx.lineTo(gridWidth, y);
-  }
-
-  ctx.stroke();
   ctx.restore();
 };

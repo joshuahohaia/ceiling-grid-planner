@@ -5,6 +5,8 @@ export type ComponentType =
   | "smokeDetector" 
   | "invalid";
 
+export type ToolType = ComponentType | 'cursor' | 'eraser';
+
 export interface GridItem {
   id: string;
   x: number;
