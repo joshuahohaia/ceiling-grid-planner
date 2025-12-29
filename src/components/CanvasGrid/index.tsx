@@ -1,35 +1,45 @@
 import { useEffect, useRef } from 'react';
 import './CanvasGrid.css';
 import { GridSettings } from '@/types/grid';
+import { COLOURS, DIMENSIONS } from '@/constants/design';
 
 const CanvasGrid = ({ numRows = 10, numColumns = 10 }: GridSettings) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  console.log('CanvasGrid rows & columns:', numRows, numColumns);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (canvasRef.current && containerRef.current) {
-        const { width, height } = containerRef.current.getBoundingClientRect();
+    const draw = () => {
+      const canvas = canvasRef.current;
+      const container = containerRef.current;
+      if (!canvas || !container) return;
 
-        const dpr = window.devicePixelRatio || 1;
+      const { width, height } = container.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
 
-        canvasRef.current.width = width * dpr;
-        canvasRef.current.height = height * dpr;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
 
-        canvasRef.current.style.width = `${width}px`;
-        canvasRef.current.style.height = `${height}px`;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
 
-        const ctx = canvasRef.current.getContext('2d');
-        if (ctx) ctx.scale(dpr, dpr);
-      }
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, width, height);
+
+      const cellSize = DIMENSIONS.cellSize;
+      const gridWidth = numColumns * cellSize;
+      const gridHeight = numRows * cellSize;
+
+      ctx.fillStyle = COLOURS.activeGrid.background;
+      ctx.fillRect(0, 0, gridWidth, gridHeight);
     };
 
-    window.addEventListener('resize', handleResize);
-    handleResize();
+    window.addEventListener('resize', draw);
+    draw();
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    return () => window.removeEventListener('resize', draw);
+  }, [numRows, numColumns]);
 
   return (
     <div ref={containerRef} className="canvas-container">
