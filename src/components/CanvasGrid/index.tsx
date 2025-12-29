@@ -1,34 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import './CanvasGrid.css';
+import { GridDimensions } from '@/types/grid';
+import { useCanvas } from '@/hooks/useCanvas';
+import { renderGrid } from '@/utils/renderGrid';
 
-const CanvasGrid: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+const CanvasGrid = ({ rows = 10, cols = 10 }: GridDimensions) => {
+  const { canvasRef, containerRef, context } = useCanvas();
 
   useEffect(() => {
-    const handleResize = () => {
-      if (canvasRef.current && containerRef.current) {
-        const { width, height } = containerRef.current.getBoundingClientRect();
-        
-        const dpr = window.devicePixelRatio || 1;
-        
-        canvasRef.current.width = width * dpr;
-        canvasRef.current.height = height * dpr;
-        
-        canvasRef.current.style.width = `${width}px`;
-        canvasRef.current.style.height = `${height}px`;
-        
-        const ctx = canvasRef.current.getContext('2d');
-        if (ctx) ctx.scale(dpr, dpr);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+    if (context) {
+      renderGrid({
+        ctx: context,
+        rows,
+        cols,
+      });
+    }
+  }, [context, rows, cols]);
   return (
     <div ref={containerRef} className="canvas-container">
       <canvas ref={canvasRef} className="canvas-element" />

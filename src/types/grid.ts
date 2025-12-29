@@ -12,7 +12,7 @@ export interface GridItem {
   type: ComponentType;
 }
 
-export interface GridSettings {
-  width: number; // in cells
-  height: number; // in cells
+export interface GridDimensions {
+  rows: number;
+  cols: number;
 }
