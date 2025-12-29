@@ -1,21 +1,70 @@
 .toolbar {
-  height: 56px;
+  height: 64px;
   background-color: #DADBCF;
-  border-top: 1px solid #C4C3B8;
   display: flex;
   align-items: center;
   padding: 0 16px;
   z-index: 10;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 24px;
 }
 
-.toolbar-section-left {
-  flex: 1;
+.toolbar-group {
   display: flex;
   gap: 8px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
 }
 
-.toolbar-section-right {
+.tool-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
   display: flex;
-  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.tool-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.tool-btn.active {
+  background-color: #C4C3B8;
+  border-color: #A3A299;
+}
+
+.tool-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: #444;
+  stroke-width: 2;
+  fill: none;
+}
+
+.tool-btn::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.tool-btn:hover::after {
+  opacity: 1;
 }
