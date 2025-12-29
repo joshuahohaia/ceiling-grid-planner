@@ -6,7 +6,7 @@ import './App.css';
 const App: React.FC = () => {
   return (
     <div className="app-container">
-      <CanvasGrid numRows={10} numColumns={10} />
+      <CanvasGrid rows={10} cols={10} />
       <Toolbar />
     </div>
   );
