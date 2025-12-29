@@ -13,6 +13,6 @@ export interface GridItem {
 }
 
 export interface GridSettings {
-  width: number; // in cells
-  height: number; // in cells
+  numRows: number;
+  numColumns: number;
 }
