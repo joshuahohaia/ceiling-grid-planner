@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ComponentType } from '@/types/grid';
 import { drawComponent } from '@/utils/drawing/drawComponent';
 
@@ -6,7 +6,7 @@ interface ToolbarIconProps {
   type: ComponentType | 'cursor' | 'eraser';
 }
 
-const ToolbarIcon: React.FC<ToolbarIconProps> = ({ type }) => {
+const ToolbarIcon = ({ type }: ToolbarIconProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const size = 32;
 

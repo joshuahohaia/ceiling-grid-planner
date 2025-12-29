@@ -1,4 +1,3 @@
-import React from 'react';
 import { ToolType } from '@/types/grid';
 import { TOOLS } from '@/constants/tools';
 import ToolbarIcon from './ToolbarIcon';
@@ -9,7 +8,7 @@ interface ToolbarProps {
   onToolChange: (tool: ToolType) => void;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ activeTool, onToolChange }) => {
+const Toolbar = ({ activeTool, onToolChange }: ToolbarProps) => {
   return (
     <div className="toolbar">
       <div className="toolbar-group">
