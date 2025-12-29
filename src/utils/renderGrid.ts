@@ -4,15 +4,24 @@ interface RenderGridParams {
   ctx: CanvasRenderingContext2D;
   rows: number;
   cols: number;
+  zoom: number;
+  pan: { x: number; y: number };
 }
 
 export const renderGrid = ({
   ctx,
   rows,
   cols,
+  zoom,
+  pan,
 }: RenderGridParams) => {
   const dpr = window.devicePixelRatio || 1;
   ctx.clearRect(0, 0, ctx.canvas.width / dpr, ctx.canvas.height / dpr);
+
+  ctx.save();
+  
+  ctx.translate(pan.x, pan.y);
+  ctx.scale(zoom, zoom);
 
   const cellSize = DIMENSIONS.cellSize;
   const gridWidth = cols * cellSize;
@@ -38,4 +47,5 @@ export const renderGrid = ({
   }
 
   ctx.stroke();
+  ctx.restore();
 };
