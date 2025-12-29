@@ -1,6 +1,6 @@
 import React from 'react';
-import CanvasGrid from '@/components/CanvasGrid';
-import Toolbar from '@/components/Toolbar';
+import CanvasGrid from '@/components/CanvasGrid/CanvasGrid';
+import Toolbar from '@/components/Toolbar/Toolbar';
 import { usePreventBrowserZoom } from '@/hooks/usePreventBrowserZoom';
 import './App.css';
 

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import './CanvasGrid.css';
-import { GridDimensions } from '@/types/grid';
 import { useCanvas } from '@/hooks/useCanvas';
 import { usePanZoom } from '@/hooks/usePanZoom';
 import { renderGrid } from '@/utils/renderGrid';
+import { GridDimensions } from '@/types/grid';
 
 const CanvasGrid = ({ rows = 10, cols = 10 }: GridDimensions) => {
   const { canvasRef, containerRef, context } = useCanvas();
