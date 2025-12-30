@@ -6,7 +6,15 @@ import './App.css';
 
 const App = () => {
   usePreventBrowserZoom();
-  const { items, activeTool, setActiveTool, handleGridClick } = useGridInteraction();
+  const { 
+    items, 
+    activeTool, 
+    setActiveTool, 
+    handleGridClick,
+    handleGridMouseDown,
+    handleGridMouseMove,
+    handleGridMouseUp 
+  } = useGridInteraction();
 
   return (
     <div className="app-container">
@@ -15,6 +23,9 @@ const App = () => {
         cols={10}
         items={items}
         onGridClick={handleGridClick}
+        onGridMouseDown={handleGridMouseDown}
+        onGridMouseMove={handleGridMouseMove}
+        onGridMouseUp={handleGridMouseUp}
       />
       <Toolbar
         activeTool={activeTool}
