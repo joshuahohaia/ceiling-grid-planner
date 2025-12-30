@@ -3,7 +3,7 @@ import { useGridItems } from './useGridItems';
 import { useToolState } from './useToolState';
 
 export const useGridInteraction = ({ rows, cols }: { rows: number; cols: number }) => {
-  const { items, addItem, removeItem, updateItem, isCellOccupied } = useGridItems();
+  const { items, addItem, removeItem, updateItem, isCellOccupied } = useGridItems(rows, cols);
   const { activeTool, setActiveTool, isComponentTool } = useToolState();
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null);
 

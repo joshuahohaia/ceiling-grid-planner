@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { renderGrid } from '@/utils/renderGrid';
 import { GridItem } from '@/types/grid';
 
@@ -19,26 +19,16 @@ export const useGridRenderer = ({
   pan,
   items,
 }: UseGridRendererProps) => {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (context) {
-      let animationFrameId: number;
-      
-      const render = () => {
-        renderGrid({
-          ctx: context,
-          rows,
-          cols,
-          zoom,
-          pan,
-          items,
-        });
-      };
-
-      animationFrameId = requestAnimationFrame(render);
-
-      return () => {
-        cancelAnimationFrame(animationFrameId);
-      };
+      renderGrid({
+        ctx: context,
+        rows,
+        cols,
+        zoom,
+        pan,
+        items,
+      });
     }
   }, [context, rows, cols, zoom, pan, items]);
 };
