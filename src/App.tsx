@@ -1,7 +1,7 @@
 import CanvasGrid from '@/components/CanvasGrid/CanvasGrid';
 import Toolbar from '@/components/Toolbar/Toolbar';
-import { usePreventBrowserZoom } from '@/hooks/usePreventBrowserZoom';
-import { useGridInteraction } from '@/hooks/useGridInteraction';
+import { usePreventBrowserZoom } from '@/hooks/utils/usePreventBrowserZoom';
+import { useGridInteraction } from '@/hooks/grid/useGridInteraction';
 import './App.css';
 
 const App = () => {

@@ -1,9 +1,9 @@
 import './CanvasGrid.css';
-import { useCanvas } from '@/hooks/useCanvas';
-import { usePanZoom } from '@/hooks/usePanZoom';
-import { useAutoCenter } from '@/hooks/useAutoCenter';
-import { useGridRenderer } from '@/hooks/useGridRenderer';
-import { useCanvasInteraction } from '@/hooks/useCanvasInteraction';
+import { useCanvas } from '@/hooks/canvas/useCanvas';
+import { usePanZoom } from '@/hooks/canvas/usePanZoom';
+import { useAutoCenter } from '@/hooks/canvas/useAutoCenter';
+import { useGridRenderer } from '@/hooks/canvas/useGridRenderer';
+import { useCanvasInteraction } from '@/hooks/canvas/useCanvasInteraction';
 import { GridDimensions, GridItem } from '@/types/grid';
 
 interface CanvasGridProps extends GridDimensions {
