@@ -4,8 +4,8 @@ import { GridItem, ComponentType } from '@/types/grid';
 export const useGridItems = () => {
   const [items, setItems] = useState<GridItem[]>([]);
 
-  const isCellOccupied = useCallback((x: number, y: number) => {
-    return items.some(item => item.x === x && item.y === y);
+  const isCellOccupied = useCallback((x: number, y: number, excludeId?: string) => {
+    return items.some(item => item.x === x && item.y === y && item.id !== excludeId);
   }, [items]);
 
   const addItem = useCallback((x: number, y: number, type: ComponentType) => {
@@ -27,10 +27,17 @@ export const useGridItems = () => {
     setItems(prev => prev.filter(item => item.x !== x || item.y !== y));
   }, []);
 
+  const updateItem = useCallback((id: string, updates: Partial<GridItem>) => {
+    setItems(prev => prev.map(item => 
+      item.id === id ? { ...item, ...updates } : item
+    ));
+  }, []);
+
   return {
     items,
     addItem,
     removeItem,
+    updateItem,
     isCellOccupied
   };
 };

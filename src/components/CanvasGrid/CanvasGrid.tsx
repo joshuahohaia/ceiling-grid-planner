@@ -9,11 +9,22 @@ import { GridDimensions, GridItem } from '@/types/grid';
 interface CanvasGridProps extends GridDimensions {
   items: GridItem[];
   onGridClick: (x: number, y: number) => void;
+  onGridMouseDown: (x: number, y: number) => boolean;
+  onGridMouseMove: (x: number, y: number) => void;
+  onGridMouseUp: () => void;
 }
 
-const CanvasGrid = ({ rows = 10, cols = 10, items, onGridClick }: CanvasGridProps) => {
+const CanvasGrid = ({
+  rows = 10,
+  cols = 10,
+  items,
+  onGridClick,
+  onGridMouseDown,
+  onGridMouseMove,
+  onGridMouseUp
+}: CanvasGridProps) => {
   const { canvasRef, containerRef, context } = useCanvas();
-  const { zoom, pan, setPan, bind } = usePanZoom();
+  const { zoom, pan, setPan, bind: panZoomBind } = usePanZoom();
 
   useAutoCenter({
     context,
@@ -33,8 +44,11 @@ const CanvasGrid = ({ rows = 10, cols = 10, items, onGridClick }: CanvasGridProp
     items,
   });
 
-  const { handleMouseDown: handleInteractionMouseDown, handleClick } = useCanvasInteraction({
+  const { handleMouseDown: handleInteractionMouseDown, handleMouseMove, handleMouseUp } = useCanvasInteraction({
     onGridClick,
+    onGridMouseDown,
+    onGridMouseMove,
+    onGridMouseUp,
     pan,
     zoom,
     cols,
@@ -43,17 +57,36 @@ const CanvasGrid = ({ rows = 10, cols = 10, items, onGridClick }: CanvasGridProp
   });
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    handleInteractionMouseDown(e);
-    bind.onMouseDown(e);
+    const captured = handleInteractionMouseDown(e);
+
+    if (!captured) {
+      panZoomBind.onMouseDown(e);
+    }
+  };
+
+  const handleContainerMouseMove = (e: React.MouseEvent) => {
+    handleMouseMove(e);
+    panZoomBind.onMouseMove(e);
+  };
+
+  const handleContainerMouseUp = (e: React.MouseEvent) => {
+    handleMouseUp(e);
+    panZoomBind.onMouseUp();
+  };
+
+  const handleContainerMouseLeave = () => {
+    panZoomBind.onMouseLeave();
   };
 
   return (
     <div
       ref={containerRef}
       className="canvas-container"
-      {...bind}
       onMouseDown={handleMouseDown}
-      onClick={handleClick}
+      onMouseMove={handleContainerMouseMove}
+      onMouseUp={handleContainerMouseUp}
+      onMouseLeave={handleContainerMouseLeave}
+      onWheel={panZoomBind.onWheel}
     >
       <canvas ref={canvasRef} className="canvas-element" />
     </div>

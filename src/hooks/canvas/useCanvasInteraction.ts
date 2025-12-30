@@ -3,6 +3,9 @@ import { DIMENSIONS } from '@/constants/design';
 
 interface UseCanvasInteractionProps {
   onGridClick: (x: number, y: number) => void;
+  onGridMouseDown: (x: number, y: number) => boolean;
+  onGridMouseMove: (x: number, y: number) => void;
+  onGridMouseUp: () => void;
   pan: { x: number; y: number };
   zoom: number;
   cols: number;
@@ -12,6 +15,9 @@ interface UseCanvasInteractionProps {
 
 export const useCanvasInteraction = ({
   onGridClick,
+  onGridMouseDown,
+  onGridMouseMove,
+  onGridMouseUp,
   pan,
   zoom,
   cols,
@@ -19,36 +25,75 @@ export const useCanvasInteraction = ({
   containerRef,
 }: UseCanvasInteractionProps) => {
   const mouseStartRef = useRef({ x: 0, y: 0 });
+  const isDraggingItemRef = useRef(false);
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    mouseStartRef.current = { x: e.clientX, y: e.clientY };
-  }, []);
-
-  const handleClick = useCallback((e: React.MouseEvent) => {
-    const dx = Math.abs(e.clientX - mouseStartRef.current.x);
-    const dy = Math.abs(e.clientY - mouseStartRef.current.y);
-
-    // If moved more than 5px, treat as drag/pan, not click
-    if (dx > 5 || dy > 5) return;
-
+  const getGridCoords = useCallback((clientX: number, clientY: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    if (!rect) return null;
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
 
-    // Grid coordinates
     const gridX = Math.floor((x - pan.x) / zoom / DIMENSIONS.cellSize);
     const gridY = Math.floor((y - pan.y) / zoom / DIMENSIONS.cellSize);
 
+    return { gridX, gridY };
+  }, [pan, zoom, containerRef]);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    mouseStartRef.current = { x: e.clientX, y: e.clientY };
+    
+    const coords = getGridCoords(e.clientX, e.clientY);
+    if (!coords) return false;
+
+    const { gridX, gridY } = coords;
+    
     // Bounds check
+    if (gridX >= 0 && gridX < cols && gridY >= 0 && gridY < rows) {
+      const captured = onGridMouseDown(gridX, gridY);
+      if (captured) {
+        isDraggingItemRef.current = true;
+        return true;
+      }
+    }
+    return false;
+  }, [getGridCoords, cols, rows, onGridMouseDown]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (isDraggingItemRef.current) {
+      const coords = getGridCoords(e.clientX, e.clientY);
+      if (coords) {
+         onGridMouseMove(coords.gridX, coords.gridY);
+      }
+    }
+  }, [getGridCoords, onGridMouseMove]);
+
+  const handleMouseUp = useCallback((e: React.MouseEvent) => {
+    if (isDraggingItemRef.current) {
+      isDraggingItemRef.current = false;
+      onGridMouseUp();
+      return;
+    }
+
+    const dx = Math.abs(e.clientX - mouseStartRef.current.x);
+    const dy = Math.abs(e.clientY - mouseStartRef.current.y);
+
+    // If moved more than 5px, treat as pan, not click
+    if (dx > 5 || dy > 5) return;
+
+    const coords = getGridCoords(e.clientX, e.clientY);
+    if (!coords) return;
+
+    const { gridX, gridY } = coords;
+
     if (gridX >= 0 && gridX < cols && gridY >= 0 && gridY < rows) {
       onGridClick(gridX, gridY);
     }
-  }, [pan, zoom, cols, rows, onGridClick, containerRef]);
+  }, [getGridCoords, cols, rows, onGridClick, onGridMouseUp]);
 
   return {
     handleMouseDown,
-    handleClick,
+    handleMouseMove,
+    handleMouseUp,
   };
 };
