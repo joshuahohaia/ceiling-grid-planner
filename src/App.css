@@ -1,11 +1,35 @@
-body, html, #root {
+:root {
+  /* Theme */
+  --color-ui-bg: #EEEFE6;
+  --color-toolbar-bg: #DADBCF;
+  --color-toolbar-btn-active: #C4C3B8;
+  --color-toolbar-border: #A3A299;
+  --color-text-main: #444;
+  --color-tooltip-bg: #333;
+  --color-grid-active-bg: #E7E8DB;
+  --color-grid-lines: #D2D1C5;
+  --color-comp-light: #E8B684;
+  --color-comp-air-supply: #58D4C9;
+  --color-comp-air-return: #CD9FEE;
+  --color-comp-smoke-detector: #D86964;
+
+  /* Dimensions */
+  --toolbar-height: 64px;
+  --spacing-base: 16px;
+  --spacing-sm: 8px;
+}
+
+body,
+html,
+#root {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #EEEFE6;
+  background-color: var(--color-ui-bg);
+  color: var(--color-text-main);
 }
 
 .app-container {
