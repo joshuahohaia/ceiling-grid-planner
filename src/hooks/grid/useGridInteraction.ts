@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useGridItems } from './useGridItems';
 import { useToolState } from './useToolState';
 
-export const useGridInteraction = () => {
+export const useGridInteraction = ({ rows, cols }: { rows: number; cols: number }) => {
   const { items, addItem, removeItem, updateItem, isCellOccupied } = useGridItems();
   const { activeTool, setActiveTool, isComponentTool } = useToolState();
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null);
@@ -37,9 +37,19 @@ export const useGridInteraction = () => {
 
   const handleGridMouseMove = useCallback((x: number, y: number) => {
     if (draggedItemId) {
+      // Boundary check
+      if (x < 0 || x >= cols || y < 0 || y >= rows) {
+        return;
+      }
+
+      // Collision check
+      if (isCellOccupied(x, y, draggedItemId)) {
+        return;
+      }
+
       updateItem(draggedItemId, { x, y });
     }
-  }, [draggedItemId, updateItem]);
+  }, [draggedItemId, updateItem, rows, cols, isCellOccupied]);
 
   const handleGridMouseUp = useCallback(() => {
     setDraggedItemId(null);

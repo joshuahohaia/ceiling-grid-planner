@@ -4,6 +4,9 @@ import { usePreventBrowserZoom } from '@/hooks/utils/usePreventBrowserZoom';
 import { useGridInteraction } from '@/hooks/grid/useGridInteraction';
 import './App.css';
 
+const ROWS = 10;
+const COLS = 10;
+
 const App = () => {
   usePreventBrowserZoom();
   const { 
@@ -14,13 +17,13 @@ const App = () => {
     handleGridMouseDown,
     handleGridMouseMove,
     handleGridMouseUp 
-  } = useGridInteraction();
+  } = useGridInteraction({ rows: ROWS, cols: COLS });
 
   return (
     <div className="app-container">
       <CanvasGrid
-        rows={10}
-        cols={10}
+        rows={ROWS}
+        cols={COLS}
         items={items}
         onGridClick={handleGridClick}
         onGridMouseDown={handleGridMouseDown}
