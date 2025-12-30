@@ -1,4 +1,8 @@
 export const COLOURS = {
+  ui: {
+    text: '#444',
+    outline: '#333',
+  },
   activeGrid: {
     background: '#E7E8DB',
     lines: '#D2D1C5',

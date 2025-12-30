@@ -1,9 +1,9 @@
 .toolbar {
-  height: 64px;
-  background-color: #DADBCF;
+  height: var(--toolbar-height);
+  background-color: var(--color-toolbar-bg);
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 var(--spacing-base);
   z-index: 10;
   justify-content: center;
   gap: 24px;
@@ -11,7 +11,7 @@
 
 .toolbar-group {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-sm);
   padding: 4px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
@@ -36,14 +36,14 @@
 }
 
 .tool-btn.active {
-  background-color: #C4C3B8;
-  border-color: #A3A299;
+  background-color: var(--color-toolbar-btn-active);
+  border-color: var(--color-toolbar-border);
 }
 
 .tool-btn svg {
   width: 24px;
   height: 24px;
-  stroke: #444;
+  stroke: var(--color-text-main);
   stroke-width: 2;
   fill: none;
 }
@@ -54,7 +54,7 @@
   bottom: 110%;
   left: 50%;
   transform: translateX(-50%);
-  background: #333;
+  background: var(--color-tooltip-bg);
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
@@ -67,4 +67,47 @@
 
 .tool-btn:hover::after {
   opacity: 1;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 32px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.grid-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  color: var(--color-text-main);
+  font-family: inherit;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.input-group label {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.input-group input {
+  width: 60px;
+  height: 32px;
+  padding: 0 var(--spacing-sm);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  color: inherit;
+  font-family: inherit;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--color-toolbar-border);
+  background: white;
 }

@@ -19,7 +19,7 @@ export const drawComponent = (ctx: CanvasRenderingContext2D, item: GridItem, cel
       ctx.beginPath();
       ctx.arc(cellSize / 2, cellSize / 2, innerSize / 1.8, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#333';
+      ctx.strokeStyle = COLOURS.ui.outline;
       ctx.lineWidth = 1;
       ctx.stroke();
       break;
@@ -29,13 +29,13 @@ export const drawComponent = (ctx: CanvasRenderingContext2D, item: GridItem, cel
       ctx.fillRect(padding, padding, innerSize, innerSize);
       
       // Border
-      ctx.strokeStyle = '#333';
+      ctx.strokeStyle = COLOURS.ui.outline;
       ctx.lineWidth = 1;
       ctx.strokeRect(padding, padding, innerSize, innerSize);
 
       // Inner X
       ctx.beginPath();
-      ctx.strokeStyle = '#333';
+      ctx.strokeStyle = COLOURS.ui.outline;
       ctx.lineWidth = 1.5;
       ctx.moveTo(padding, padding);
       ctx.lineTo(padding + innerSize, padding + innerSize);
@@ -49,13 +49,13 @@ export const drawComponent = (ctx: CanvasRenderingContext2D, item: GridItem, cel
       ctx.fillRect(padding, padding, innerSize, innerSize);
       
       // Border
-      ctx.strokeStyle = '#333';
+      ctx.strokeStyle = COLOURS.ui.outline;
       ctx.lineWidth = 1;
       ctx.strokeRect(padding, padding, innerSize, innerSize);
 
       // Single Diagonal
       ctx.beginPath();
-      ctx.strokeStyle = '#333';
+      ctx.strokeStyle = COLOURS.ui.outline;
       ctx.lineWidth = 1.5;
       ctx.moveTo(padding, padding + innerSize);
       ctx.lineTo(padding + innerSize, padding);
