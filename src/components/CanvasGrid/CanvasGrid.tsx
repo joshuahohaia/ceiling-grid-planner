@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from 'react';
 import './CanvasGrid.css';
 import { useCanvas } from '@/hooks/canvas/useCanvas';
 import { usePanZoom } from '@/hooks/canvas/usePanZoom';
@@ -12,6 +13,7 @@ interface CanvasGridProps extends GridDimensions {
   onGridMouseDown: (x: number, y: number) => boolean;
   onGridMouseMove: (x: number, y: number) => void;
   onGridMouseUp: () => void;
+  onFitToViewReady?: (fitToView: () => void) => void;
 }
 
 const CanvasGrid = ({
@@ -21,10 +23,23 @@ const CanvasGrid = ({
   onGridClick,
   onGridMouseDown,
   onGridMouseMove,
-  onGridMouseUp
+  onGridMouseUp,
+  onFitToViewReady
 }: CanvasGridProps) => {
   const { canvasRef, containerRef, context } = useCanvas();
-  const { zoom, pan, setPan, bind: panZoomBind } = usePanZoom();
+  const { zoom, pan, setPan, fitToView, bind: panZoomBind } = usePanZoom();
+
+  const handleFitToView = useCallback(() => {
+    if (!containerRef.current) return;
+    const { width, height } = containerRef.current.getBoundingClientRect();
+    fitToView(width, height, cols, rows);
+  }, [containerRef, fitToView, cols, rows]);
+
+  useEffect(() => {
+    if (onFitToViewReady) {
+      onFitToViewReady(handleFitToView);
+    }
+  }, [onFitToViewReady, handleFitToView]);
 
   useAutoCenter({
     context,
