@@ -4,6 +4,7 @@ import { GridItem } from '@/types/grid';
 
 interface UseGridRendererProps {
   context: CanvasRenderingContext2D | null;
+  contextVersion: number;
   rows: number;
   cols: number;
   zoom: number;
@@ -13,6 +14,7 @@ interface UseGridRendererProps {
 
 export const useGridRenderer = ({
   context,
+  contextVersion,
   rows,
   cols,
   zoom,
@@ -30,5 +32,5 @@ export const useGridRenderer = ({
         items,
       });
     }
-  }, [context, rows, cols, zoom, pan, items]);
+  }, [context, contextVersion, rows, cols, zoom, pan, items]);
 };

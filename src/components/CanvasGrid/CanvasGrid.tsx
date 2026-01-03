@@ -34,7 +34,7 @@ const CanvasGrid = ({
   onViewControlsReady,
   onZoomChange
 }: CanvasGridProps) => {
-  const { canvasRef, containerRef, context } = useCanvas();
+  const { canvasRef, containerRef, context, contextVersion } = useCanvas();
   const { zoom, pan, isPanning, fitToView, zoomInAtCenter, zoomOutAtCenter, bind: panZoomBind } = usePanZoom();
   const [hoverPosition, setHoverPosition] = useState<{ x: number; y: number } | null>(null);
 
@@ -63,6 +63,7 @@ const CanvasGrid = ({
 
   useGridRenderer({
     context,
+    contextVersion,
     rows,
     cols,
     zoom,
