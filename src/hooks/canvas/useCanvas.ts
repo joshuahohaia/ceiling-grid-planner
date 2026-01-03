@@ -1,38 +1,57 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 export const useCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const [contextState, setContextState] = useState<{
+    ctx: CanvasRenderingContext2D | null;
+    version: number;
+  }>({ ctx: null, version: 0 });
+
+  const handleResize = useCallback(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+
+    if (!canvas || !container) return;
+
+    const { width, height } = container.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+      setContextState(prev => ({ ctx, version: prev.version + 1 }));
+    }
+  }, []);
 
   useEffect(() => {
-    const handleResize = () => {
-      const canvas = canvasRef.current;
-      const container = containerRef.current;
+    const container = containerRef.current;
+    if (!container) return;
 
-      if (!canvas || !container) return;
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(container);
 
-      const { width, height } = container.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
+    handleResize();
 
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
+    return () => resizeObserver.disconnect();
+  }, [handleResize]);
 
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.scale(dpr, dpr);
-        setContext(ctx);
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        handleResize();
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    handleResize();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [handleResize]);
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return { canvasRef, containerRef, context };
+  return { canvasRef, containerRef, context: contextState.ctx, contextVersion: contextState.version };
 };

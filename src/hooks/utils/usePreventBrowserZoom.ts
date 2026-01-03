@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 export const usePreventBrowserZoom = () => {
   useEffect(() => {
     const preventDefault = (e: WheelEvent) => {
-      if (e.ctrlKey || !e.ctrlKey) {
+      if (e.ctrlKey) {
         e.preventDefault();
       }
     };

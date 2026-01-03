@@ -2,7 +2,7 @@
 
 A canvas-based ceiling grid editor application
 
-The application allows users to visualise and edit a rectangular ceiling grid using standard 0.6m × 0.6m tiles, supporting component placement, dragging, panning, and zooming — with performance suitable for large grids.
+The application allows users to visualise and edit a rectangular ceiling grid using standard 0.6m × 0.6m tiles, supporting component placement, dragging, panning, and zooming and large grid resizing.
 
 ![Product screenshot](/media/productScreenshot.png)
 
