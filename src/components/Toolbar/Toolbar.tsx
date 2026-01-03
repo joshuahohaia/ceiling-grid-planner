@@ -11,9 +11,13 @@ interface ToolbarProps {
   onRowsChange: (rows: number) => void;
   onColsChange: (cols: number) => void;
   onFitToView: () => void;
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  zoom: number;
 }
 
-const Toolbar = ({ activeTool, onToolChange, rows, cols, onRowsChange, onColsChange, onFitToView }: ToolbarProps) => {
+const Toolbar = ({ activeTool, onToolChange, rows, cols, onRowsChange, onColsChange, onFitToView, onZoomIn, onZoomOut, zoom }: ToolbarProps) => {
+  const zoomPercent = Math.round(zoom * 100);
   return (
     <div className="toolbar">
       <div className="toolbar-group">
@@ -32,6 +36,21 @@ const Toolbar = ({ activeTool, onToolChange, rows, cols, onRowsChange, onColsCha
       <div className="toolbar-divider" />
 
       <div className="toolbar-group view-controls">
+        <button
+          className="tool-btn"
+          onClick={onZoomOut}
+          title="Zoom Out"
+        >
+          <ToolbarIcon type="zoomOut" />
+        </button>
+        <span className="zoom-indicator">{zoomPercent}%</span>
+        <button
+          className="tool-btn"
+          onClick={onZoomIn}
+          title="Zoom In"
+        >
+          <ToolbarIcon type="zoomIn" />
+        </button>
         <button
           className="tool-btn"
           onClick={onFitToView}

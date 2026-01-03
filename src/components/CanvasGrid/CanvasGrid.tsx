@@ -1,10 +1,10 @@
-import { useCallback, useEffect } from 'react';
 import './CanvasGrid.css';
 import { useCanvas } from '@/hooks/canvas/useCanvas';
 import { usePanZoom } from '@/hooks/canvas/usePanZoom';
-import { useAutoCenter } from '@/hooks/canvas/useAutoCenter';
 import { useGridRenderer } from '@/hooks/canvas/useGridRenderer';
 import { useCanvasInteraction } from '@/hooks/canvas/useCanvasInteraction';
+import { useViewControlHandlers } from '@/hooks/canvas/useViewControlHandlers';
+import { ViewControlHandlers } from '@/hooks/canvas/useViewControls';
 import { GridDimensions, GridItem } from '@/types/grid';
 
 interface CanvasGridProps extends GridDimensions {
@@ -13,7 +13,8 @@ interface CanvasGridProps extends GridDimensions {
   onGridMouseDown: (x: number, y: number) => boolean;
   onGridMouseMove: (x: number, y: number) => void;
   onGridMouseUp: () => void;
-  onFitToViewReady?: (fitToView: () => void) => void;
+  onViewControlsReady?: (handlers: ViewControlHandlers) => void;
+  onZoomChange?: (zoom: number) => void;
 }
 
 const CanvasGrid = ({
@@ -24,30 +25,23 @@ const CanvasGrid = ({
   onGridMouseDown,
   onGridMouseMove,
   onGridMouseUp,
-  onFitToViewReady
+  onViewControlsReady,
+  onZoomChange
 }: CanvasGridProps) => {
   const { canvasRef, containerRef, context } = useCanvas();
-  const { zoom, pan, setPan, fitToView, bind: panZoomBind } = usePanZoom();
+  const { zoom, pan, fitToView, zoomInAtCenter, zoomOutAtCenter, bind: panZoomBind } = usePanZoom();
 
-  const handleFitToView = useCallback(() => {
-    if (!containerRef.current) return;
-    const { width, height } = containerRef.current.getBoundingClientRect();
-    fitToView(width, height, cols, rows);
-  }, [containerRef, fitToView, cols, rows]);
-
-  useEffect(() => {
-    if (onFitToViewReady) {
-      onFitToViewReady(handleFitToView);
-    }
-  }, [onFitToViewReady, handleFitToView]);
-
-  useAutoCenter({
+  useViewControlHandlers({
     context,
     containerRef,
     cols,
     rows,
     zoom,
-    setPan,
+    fitToView,
+    zoomInAtCenter,
+    zoomOutAtCenter,
+    onViewControlsReady,
+    onZoomChange,
   });
 
   useGridRenderer({

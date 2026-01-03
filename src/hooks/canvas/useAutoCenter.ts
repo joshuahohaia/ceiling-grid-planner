@@ -1,37 +1,27 @@
 import { useEffect, useRef } from 'react';
-import { DIMENSIONS } from '@/constants/design';
 
-interface AutoCenterProps {
+interface InitialFitToViewProps {
   context: CanvasRenderingContext2D | null;
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
   cols: number;
   rows: number;
-  zoom: number;
-  setPan: (pan: { x: number; y: number }) => void;
+  fitToView: (containerWidth: number, containerHeight: number, cols: number, rows: number) => void;
 }
 
-export const useAutoCenter = ({
+export const useInitialFitToView = ({
   context,
   containerRef,
   cols,
   rows,
-  zoom,
-  setPan,
-}: AutoCenterProps) => {
+  fitToView,
+}: InitialFitToViewProps) => {
   const initializedRef = useRef(false);
 
   useEffect(() => {
     if (context && containerRef.current && !initializedRef.current) {
       const { width, height } = containerRef.current.getBoundingClientRect();
-      
-      const gridPixelWidth = cols * DIMENSIONS.cellSize * zoom;
-      const gridPixelHeight = rows * DIMENSIONS.cellSize * zoom;
-
-      const initialPanX = (width - gridPixelWidth) / 2;
-      const initialPanY = (height - gridPixelHeight) / 2;
-
-      setPan({ x: initialPanX, y: initialPanY });
+      fitToView(width, height, cols, rows);
       initializedRef.current = true;
     }
-  }, [context, cols, rows, zoom, setPan, containerRef]);
+  }, [context, containerRef, cols, rows, fitToView]);
 };

@@ -111,3 +111,12 @@
   border-color: var(--color-toolbar-border);
   background: white;
 }
+
+.zoom-indicator {
+  min-width: 48px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-main);
+  font-variant-numeric: tabular-nums;
+}

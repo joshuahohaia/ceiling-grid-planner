@@ -10,7 +10,7 @@ import './App.css';
 const App = () => {
   usePreventBrowserZoom();
   const { rows, cols, setRows, setCols } = useGridDimensions(10, 10);
-  const { fitToView, onFitToViewReady } = useViewControls();
+  const { zoom, fitToView, zoomIn, zoomOut, onViewControlsReady, onZoomChange } = useViewControls();
 
   const { items,
     activeTool,
@@ -33,7 +33,8 @@ const App = () => {
         onGridMouseDown={handleGridMouseDown}
         onGridMouseMove={handleGridMouseMove}
         onGridMouseUp={handleGridMouseUp}
-        onFitToViewReady={onFitToViewReady}
+        onViewControlsReady={onViewControlsReady}
+        onZoomChange={onZoomChange}
       />
       <Toolbar
         activeTool={activeTool}
@@ -43,6 +44,9 @@ const App = () => {
         onRowsChange={setRows}
         onColsChange={setCols}
         onFitToView={fitToView}
+        onZoomIn={zoomIn}
+        onZoomOut={zoomOut}
+        zoom={zoom}
       />
     </div>
   );

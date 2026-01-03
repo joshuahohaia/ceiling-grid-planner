@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { ComponentType } from '@/types/grid';
 import { drawComponent } from '@/utils/drawing/drawComponent';
 
-type IconType = ComponentType | 'cursor' | 'eraser' | 'fitToView';
+type IconType = ComponentType | 'cursor' | 'eraser' | 'fitToView' | 'zoomIn' | 'zoomOut';
 
 interface ToolbarIconProps {
   type: IconType;
@@ -132,6 +132,41 @@ const ToolbarIcon = ({ type }: ToolbarIconProps) => {
       ctx.lineWidth = 1;
       const inset = 8;
       ctx.strokeRect(inset, inset, s - inset * 2, s - inset * 2);
+    } else if (type === 'zoomIn' || type === 'zoomOut') {
+      ctx.translate(4, 4);
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = 'round';
+
+      const r = 8;
+      const cx = 10;
+      const cy = 10;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(cx + r * 0.7, cy + r * 0.7);
+      ctx.lineTo(cx + r * 1.5, cy + r * 1.5);
+      ctx.stroke();
+
+      ctx.lineWidth = 2;
+      if (type === 'zoomIn') {
+        ctx.beginPath();
+        ctx.moveTo(cx - 4, cy);
+        ctx.lineTo(cx + 4, cy);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 4);
+        ctx.lineTo(cx, cy + 4);
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(cx - 4, cy);
+        ctx.lineTo(cx + 4, cy);
+        ctx.stroke();
+      }
     } else {
       drawComponent(
         ctx,
