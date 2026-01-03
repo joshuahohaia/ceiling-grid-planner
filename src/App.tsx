@@ -18,7 +18,8 @@ const App = () => {
     handleGridClick,
     handleGridMouseDown,
     handleGridMouseMove,
-    handleGridMouseUp
+    handleGridMouseUp,
+    draggedItemId
   } = useGridInteraction({ rows, cols });
 
   useKeyboardShortcuts(setActiveTool);
@@ -29,6 +30,8 @@ const App = () => {
         rows={rows}
         cols={cols}
         items={items}
+        activeTool={activeTool}
+        isDraggingItem={draggedItemId !== null}
         onGridClick={handleGridClick}
         onGridMouseDown={handleGridMouseDown}
         onGridMouseMove={handleGridMouseMove}

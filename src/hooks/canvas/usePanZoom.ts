@@ -97,6 +97,7 @@ export const usePanZoom = (initialZoom = 1) => {
     setZoom,
     pan,
     setPan,
+    isPanning: isDragging,
     fitToView,
     zoomInAtCenter,
     zoomOutAtCenter,

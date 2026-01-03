@@ -6,6 +6,7 @@ interface UseCanvasInteractionProps {
   onGridMouseDown: (x: number, y: number) => boolean;
   onGridMouseMove: (x: number, y: number) => void;
   onGridMouseUp: () => void;
+  onHoverPositionChange?: (position: { x: number; y: number } | null) => void;
   pan: { x: number; y: number };
   zoom: number;
   cols: number;
@@ -18,6 +19,7 @@ export const useCanvasInteraction = ({
   onGridMouseDown,
   onGridMouseMove,
   onGridMouseUp,
+  onHoverPositionChange,
   pan,
   zoom,
   cols,
@@ -60,13 +62,16 @@ export const useCanvasInteraction = ({
   }, [getGridCoords, cols, rows, onGridMouseDown]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (isDraggingItemRef.current) {
-      const coords = getGridCoords(e.clientX, e.clientY);
-      if (coords) {
-         onGridMouseMove(coords.gridX, coords.gridY);
-      }
+    const coords = getGridCoords(e.clientX, e.clientY);
+
+    if (coords && onHoverPositionChange) {
+      onHoverPositionChange({ x: coords.gridX, y: coords.gridY });
     }
-  }, [getGridCoords, onGridMouseMove]);
+
+    if (isDraggingItemRef.current && coords) {
+      onGridMouseMove(coords.gridX, coords.gridY);
+    }
+  }, [getGridCoords, onGridMouseMove, onHoverPositionChange]);
 
   const handleMouseUp = useCallback((e: React.MouseEvent) => {
     if (isDraggingItemRef.current) {
