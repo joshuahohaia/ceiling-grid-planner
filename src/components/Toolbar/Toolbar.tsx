@@ -21,7 +21,7 @@ const Toolbar = ({ activeTool, onToolChange, rows, cols, onRowsChange, onColsCha
             key={tool.id}
             className={`tool-btn ${activeTool === tool.id ? 'active' : ''}`}
             onClick={() => onToolChange(tool.id)}
-            title={tool.label}
+            title={`${tool.label} (${tool.shortcut})`}
           >
             <ToolbarIcon type={tool.id} />
           </button>

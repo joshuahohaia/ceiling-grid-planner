@@ -1,6 +1,7 @@
 import CanvasGrid from '@/components/CanvasGrid/CanvasGrid';
 import Toolbar from '@/components/Toolbar/Toolbar';
 import { usePreventBrowserZoom } from '@/hooks/utils/usePreventBrowserZoom';
+import { useKeyboardShortcuts } from '@/hooks/utils/useKeyboardShortcuts';
 import { useGridInteraction } from '@/hooks/grid/useGridInteraction';
 import { useGridDimensions } from '@/hooks/grid/useGridDimensions';
 import './App.css';
@@ -17,6 +18,8 @@ const App = () => {
     handleGridMouseMove,
     handleGridMouseUp
   } = useGridInteraction({ rows, cols });
+
+  useKeyboardShortcuts(setActiveTool);
 
   return (
     <div className="app-container">
