@@ -2,8 +2,10 @@ import { useEffect, useRef } from 'react';
 import { ComponentType } from '@/types/grid';
 import { drawComponent } from '@/utils/drawing/drawComponent';
 
+type IconType = ComponentType | 'cursor' | 'eraser' | 'fitToView';
+
 interface ToolbarIconProps {
-  type: ComponentType | 'cursor' | 'eraser';
+  type: IconType;
 }
 
 const ToolbarIcon = ({ type }: ToolbarIconProps) => {
@@ -75,6 +77,61 @@ const ToolbarIcon = ({ type }: ToolbarIconProps) => {
       ctx.lineTo(15, 19);
       ctx.lineTo(12, 22);
       ctx.fill();
+    } else if (type === 'fitToView') {
+      ctx.translate(4, 4);
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      const s = 24;
+      const corner = 6;
+      const arrow = 3;
+
+      ctx.beginPath();
+      ctx.moveTo(corner, 0);
+      ctx.lineTo(0, 0);
+      ctx.lineTo(0, corner);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(arrow, arrow);
+      ctx.lineTo(0, 0);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(s - corner, 0);
+      ctx.lineTo(s, 0);
+      ctx.lineTo(s, corner);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(s - arrow, arrow);
+      ctx.lineTo(s, 0);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(0, s - corner);
+      ctx.lineTo(0, s);
+      ctx.lineTo(corner, s);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(arrow, s - arrow);
+      ctx.lineTo(0, s);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(s, s - corner);
+      ctx.lineTo(s, s);
+      ctx.lineTo(s - corner, s);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(s - arrow, s - arrow);
+      ctx.lineTo(s, s);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#666';
+      ctx.lineWidth = 1;
+      const inset = 8;
+      ctx.strokeRect(inset, inset, s - inset * 2, s - inset * 2);
     } else {
       drawComponent(
         ctx,

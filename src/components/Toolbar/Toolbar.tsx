@@ -10,9 +10,10 @@ interface ToolbarProps {
   cols: number;
   onRowsChange: (rows: number) => void;
   onColsChange: (cols: number) => void;
+  onFitToView: () => void;
 }
 
-const Toolbar = ({ activeTool, onToolChange, rows, cols, onRowsChange, onColsChange }: ToolbarProps) => {
+const Toolbar = ({ activeTool, onToolChange, rows, cols, onRowsChange, onColsChange, onFitToView }: ToolbarProps) => {
   return (
     <div className="toolbar">
       <div className="toolbar-group">
@@ -28,6 +29,18 @@ const Toolbar = ({ activeTool, onToolChange, rows, cols, onRowsChange, onColsCha
         ))}
       </div>
       
+      <div className="toolbar-divider" />
+
+      <div className="toolbar-group view-controls">
+        <button
+          className="tool-btn"
+          onClick={onFitToView}
+          title="Fit to View"
+        >
+          <ToolbarIcon type="fitToView" />
+        </button>
+      </div>
+
       <div className="toolbar-divider" />
 
       <div className="toolbar-group grid-controls">
