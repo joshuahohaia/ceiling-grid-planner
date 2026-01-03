@@ -5,8 +5,36 @@
   align-items: center;
   padding: 0 var(--spacing-base);
   z-index: 10;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+}
+
+.toolbar::after {
+  content: '';
+  padding-right: var(--spacing-base);
+  flex-shrink: 0;
+}
+
+.toolbar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.toolbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toolbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+}
+
+@media (min-width: 900px) {
+  .toolbar {
+    justify-content: center;
+  }
 }
 
 .toolbar-group {
@@ -15,6 +43,7 @@
   padding: 4px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .tool-btn {
@@ -73,6 +102,7 @@
   width: 1px;
   height: 32px;
   background-color: rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
 .grid-controls {
@@ -119,4 +149,30 @@
   font-weight: 500;
   color: var(--color-text-main);
   font-variant-numeric: tabular-nums;
+}
+
+.size-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: rgba(68, 68, 68, 0.7);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.size-cells {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--color-text-main);
+}
+
+.size-meters {
+  font-weight: 500;
+}
+
+.size-tile {
+  opacity: 0.7;
 }
