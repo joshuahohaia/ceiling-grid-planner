@@ -1,4 +1,7 @@
 import { useState, useCallback } from 'react';
+import { DIMENSIONS } from '@/constants/design';
+
+const FIT_PADDING = 0.9;
 
 export interface PanZoomState {
   zoom: number;
@@ -10,6 +13,24 @@ export const usePanZoom = (initialZoom = 1) => {
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
+
+  const fitToView = useCallback((containerWidth: number, containerHeight: number, cols: number, rows: number) => {
+    const gridWidth = cols * DIMENSIONS.cellSize;
+    const gridHeight = rows * DIMENSIONS.cellSize;
+
+    const scaleX = containerWidth / gridWidth;
+    const scaleY = containerHeight / gridHeight;
+    const newZoom = Math.min(scaleX, scaleY) * FIT_PADDING;
+    const clampedZoom = Math.min(Math.max(0.1, newZoom), 5);
+
+    const scaledGridWidth = gridWidth * clampedZoom;
+    const scaledGridHeight = gridHeight * clampedZoom;
+    const newPanX = (containerWidth - scaledGridWidth) / 2;
+    const newPanY = (containerHeight - scaledGridHeight) / 2;
+
+    setZoom(clampedZoom);
+    setPan({ x: newPanX, y: newPanY });
+  }, []);
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     setIsDragging(true);
@@ -32,7 +53,7 @@ export const usePanZoom = (initialZoom = 1) => {
   const onWheel = useCallback((e: React.WheelEvent) => {
     // e.preventDefault(); potentially need this here if not using global prevent
     
-    const zoomSensitivity = 0.038;
+    const zoomSensitivity = 0.001;
     const delta = -e.deltaY * zoomSensitivity;
     const newZoom = Math.min(Math.max(0.1, zoom * (1 + delta)), 5); 
 
@@ -55,6 +76,7 @@ export const usePanZoom = (initialZoom = 1) => {
     setZoom,
     pan,
     setPan,
+    fitToView,
     bind: {
       onMouseDown,
       onMouseMove,
